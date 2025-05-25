@@ -1,0 +1,74 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
+
+class FirstWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Тест Руфье')
+        self.setGeometry(100, 100, 400, 300)
+
+        self.text1 = QLabel('Первый текст')
+        self.button = QPushButton('Перейти на второе окно')
+
+        font = self.text1.font()
+        font.setPointSize(12)
+        self.text1.setFont(font)
+        
+        layout = QVBoxLayout()
+        layout.addWidget(self.text1, alignment=Qt.AlignCenter)
+        layout.addWidget(self.button, alignment=Qt.AlignCenter)
+        self.setLayout(layout)
+
+        self.button.clicked.connect(self.go_to_second_window)
+
+        self.second_window = SecondWindow()
+
+    def go_to_second_window(self):
+        self.second_window.show()
+        self.close()
+
+class SecondWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Второе окно')
+        self.setGeometry(100, 100, 400, 300)
+
+        self.label = QLabel('Это второе окно')
+        self.button_to_third = QPushButton('Перейти на третье окно')
+        self.button_to_first = QPushButton('Вернуться на первое окно')
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label, alignment=Qt.AlignCenter)
+        layout.addWidget(self.button_to_first, alignment=Qt.AlignCenter)
+        layout.addWidget(self.button_to_third, alignment=Qt.AlignCenter)
+        self.setLayout(layout)
+
+        self.button_to_first.clicked.connect(self.go_to_first_window)
+        self.button_to_third.clicked.connect(self.open_third_window)
+
+    def go_to_first_window(self):
+        self.close()  # Закрывает второе окно
+    
+    def open_third_window(self):
+        self.third_window = ThirdWindow()  # Создание третьего окна
+        self.third_window.show()  # Отображение третьего окна
+
+
+
+class ThirdWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Третье окно')
+        self.setGeometry(100, 100, 400, 300)
+
+        self.label = QLabel('Это третье окно')
+        layout = QVBoxLayout()
+        layout.addWidget(self.label, alignment=Qt.AlignCenter)
+        self.setLayout(layout)
+
+app = QApplication([])
+
+first_window = FirstWindow()
+first_window.show()
+
+app.exec_()
